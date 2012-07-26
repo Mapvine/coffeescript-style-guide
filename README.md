@@ -265,6 +265,14 @@ Prefer single quoted strings (`''`) instead of double quoted (`""`) strings, unl
 ## Conditionals
 
 Favor `unless` over `if` for negative conditions.
+```coffeescript
+  # Yes
+  unless false
+    ...
+  # Fired
+  if not false
+    ...
+```
 
 Instead of using `unless...else`, use `if...else`:
 
