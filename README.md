@@ -53,7 +53,7 @@ Use **spaces only**, with **2 spaces** per indentation level. Never mix tabs and
 <a name="maximum_line_length"/>
 ### Maximum Line Length
 
-Limit all lines to a maximum of 79 characters.
+Limit all lines to a maximum of 100 characters.
 
 <a name="blank_lines"/>
 ### Blank Lines
@@ -97,15 +97,15 @@ Avoid extraneous whitespace in the following situations:
 - Immediately inside parentheses, brackets or braces
 
     ```coffeescript
-       ($ 'body') # Yes
-       ( $ 'body' ) # No
+       ($('body')) # Yes
+       ( $( 'body' ) ) # Fired
     ```
 
 - Immediately before a comma
 
     ```coffeescript
        console.log x, y # Yes
-       console.log x , y # No
+       console.log x , y # Fired
     ```
 
 Additional recommendations:
@@ -118,7 +118,7 @@ Additional recommendations:
 
            ```coffeescript
            test: (param = null) -> # Yes
-           test: (param=null) -> # No
+           test: (param=null) -> # Fired
            ```
 
     - augmented assignment: `+=`, `-=`, etc.
@@ -133,7 +133,7 @@ Additional recommendations:
            y = 1
            fooBar = 3
 
-           # No
+           # Fired
            x      = 1
            y      = 1
            fooBar = 3
@@ -226,11 +226,11 @@ foo = (arg1, arg2) -> # Yes
 foo = (arg1, arg2)-> # No
 ```
 
-Do not use parentheses when declaring functions that take no arguments:
+Always use parentheses when declaring functions that take no arguments:
 
 ```coffeescript
-bar = -> # Yes
-bar = () -> # No
+bar = () -> # Yes
+bar = -> # Fired
 ```
 
 In cases where method calls are being chained and the code does not fit on a single line, each call should be placed on a separate line and indented by one level (i.e., two spaces), with a leading `.`.
@@ -243,46 +243,11 @@ In cases where method calls are being chained and the code does not fit on a sin
   .reduce((x, y) -> x + y)
 ```
 
-When calling functions, choose to omit or include parentheses in such a way that optimizes for readability. Keeping in mind that "readability" can be subjective, the following examples demonstrate cases where parentheses have been omitted or included in a manner that the community deems to be optimal:
-
+When calling functions, _always use parenthesis_
 ```coffeescript
-baz 12
-
-brush.ellipse x: 10, y: 20 # Braces can also be omitted or included for readability
-
-foo(4).bar(8)
-
-obj.value(10, 20) / obj.value(20, 10)
-
-print inspect value
-
-new Tag(new Value(a, b), new Arg(c))
+console.log('string') # Yes
+console.log 'string' # Fired
 ```
-
-You will sometimes see parentheses used to group functions (instead of being used to group function parameters). Examples of using this style (hereafter referred to as the "function grouping style"):
-
-```coffeescript
-($ '#selektor').addClass 'klass'
-
-(foo 4).bar 8
-```
-
-This is in contrast to:
-
-```coffeescript
-$('#selektor').addClass 'klass'
-
-foo(4).bar 8
-```
-
-In cases where method calls are being chained, some adopters of this style prefer to use function grouping for the initial call only:
-
-```coffeescript
-($ '#selektor').addClass('klass').hide() # Initial call only
-(($ '#selektor').addClass 'klass').hide() # All calls
-```
-
-The function grouping style is not recommended. However, **if the function grouping style is adopted for a particular project, be consistent with its usage.**
 
 <a name="strings"/>
 ## Strings
@@ -310,7 +275,7 @@ Instead of using `unless...else`, use `if...else`:
   else
     ...
 
-  # No
+  # Fired
   unless false
     ...
   else
@@ -326,7 +291,7 @@ Multi-line if/else clauses should use indentation:
   else
     ...
 
-  # No
+  # Fired
   if true then ...
   else ...
 ```
@@ -340,7 +305,7 @@ Take advantage of comprehensions whenever possible:
   # Yes
   result = (item.name for item in array)
 
-  # No
+  # Fired
   results = []
   for item in array
     results.push item.name
@@ -362,9 +327,7 @@ alert("#{key} = #{value}") for key, value of object
 <a name="#extending_native_objects"/>
 ## Extending Native Objects
 
-Do not modify native objects.
-
-For example, do not modify `Array.prototype` to introduce `Array#forEach`.
+You may modify native objects if your modifications are well documented and documentation is distributed to the dev team.
 
 <a name="exceptions"/>
 ## Exceptions
@@ -400,7 +363,7 @@ Annotation types:
 - `FIXME`: describe broken code that must be fixed
 - `OPTIMIZE`: describe code that is inefficient and may become a bottleneck
 - `HACK`: describe the use of a questionable (or ingenious) coding practice
-- `REVIEW`: describe code that should be reviewed to confirm implementation
+- `NOTE`: more important comment that should be paid attention to
 
 If a custom annotation is required, the annotation should be documented in the project's README.
 
@@ -419,28 +382,28 @@ If a custom annotation is required, the annotation should be documented in the p
 
 ```coffeescript
 temp or= {} # Yes
-temp = temp || {} # No
+temp = temp || {} # Fired
 ```
 
 Prefer shorthand notation (`::`) for accessing an object's prototype:
 
 ```coffeescript
 Array::slice # Yes
-Array.prototype.slice # No
+Array.prototype.slice # Fired
 ```
 
 Prefer `@property` over `this.property`.
 
 ```coffeescript
 return @property # Yes
-return this.property # No
+return this.property # Fired
 ```
 
 However, avoid the use of **standalone** `@`:
 
 ```coffeescript
 return this # Yes
-return @ # No
+return @ # Fired
 ```
 
 Avoid `return` where not required, unless the explicit return increases clarity.
